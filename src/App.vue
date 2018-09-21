@@ -138,6 +138,14 @@ button:hover {
     color: #0b0117;
 }
 
+input {
+    background: transparent;
+    border: 1px solid #b537a4;
+    padding: 10px;
+    color: #b537a4;
+    outline: none;
+}
+
 .posts ul {
     display: -webkit-flex;
     display: -moz-flex;
