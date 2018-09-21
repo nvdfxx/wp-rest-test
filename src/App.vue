@@ -1,26 +1,36 @@
 <template>
   <div id="app">
-        <input type="number" min="9" max="10" step="1" v-model.number="pushInfo.lvl">
-        <input type="number" min="0" step="100" v-model.number="pushInfo.avgDmg">
-        <input type="number" min="20" max="100" step="1" v-model.number="pushInfo.wins">
-        <input type="number" min="1" step="100" v-model.number="pushInfo.battleCount">
-        <button @click="pushTank(pushInfo.lvl, pushInfo.avgDmg, pushInfo.wins, pushInfo.battleCount)">PUSH</button>
-        <div>{{ avgLvl }}</div>
-        <div class="list">
-            <ul>
-                <li v-for="(tank, index) in tanks">
-                    {{ tank.lvl }}, {{ tank.avgDmg }}, {{ tank.wins }}, {{ tank.battleCount }} 
-                    <button @click="deleteTank(index)">Delete</button>
-                </li>
-            </ul>
-        </div>
-        <div>
-            <button @click="allNames()" >All names</button>
-            <ul>
-                <li v-for="name in names">
-                    {{ name }}
-                 </li>
-            </ul>
+        <div class="main-wrapper">
+            <div>
+                <button @click="allNames()" >All names</button>
+                <ul>
+                    <li v-for="name in names">
+                        {{ name }}
+                     </li>
+                </ul>
+            </div>
+            <div class="photos">
+                <div :class="{active: loading}" class="onloading">Загрузка...</div>
+                <input type="number" min="0" v-model.number="photocount">
+                <button @click="getPhotos(photocount)">Photos</button>
+                <div>
+                    <img :src="photos.url" alt="">
+                    <p>{{ photos.title }}</p>
+                </div>
+            
+            </div>
+            <div class="posts">
+                <input type="number" v-model.number="postscount">
+                <button @click="getPosts(postscount)">posts</button>
+                <ul>
+                    <li :key="key" v-for="(post,key,index) in posts">
+                        <div class="post-id">Post ID: {{ post.id }}</div>
+                        <div class="post-title">Title: {{ post.title }}</div>
+                        <div class="post-body">{{ post.body }}</div>
+                        <button @click="delPost(index)">delete this post</button>
+                    </li>
+                </ul>
+            </div>
         </div>
   </div>
 </template>
@@ -32,30 +42,14 @@ export default {
     name: 'app',
     data () {
         return {
+            postscount: 0,
+            photocount: 0,
             info: null,
             error: null,
             names: [],
-            pushInfo: {
-                lvl: 10,
-                avgDmg: 2500,
-                wins: 55,
-                battleCount: 200
-            },
-
-            tanks: [
-                {
-                    lvl: 10,
-                    avgDmg: 2700,
-                    wins: 57,
-                    battleCount: 350,
-                },
-                {
-                    lvl: 10,
-                    avgDmg: 3000,
-                    wins: 77,
-                    battleCount: 2350,
-                }
-            ]
+            photos: [],
+            posts: [],
+            loading: false,
         }
     },
     mounted() {
@@ -70,33 +64,40 @@ export default {
         jsonParcer: function() {
             console.log(JSON.stringify(this.info,null,4));
             return JSON.stringify(this.info,null,4);
-        },
-
-        avgLvl: function() {
-            var sumLvl = 0;
-            this.tanks.forEach(function(el){
-                sumLvl += el.lvl;
-                console.log(sumLvl)
-            });
-
-            return sumLvl / this.tanks.length
         }
+
     },
     methods: {
-        pushTank: function(lvl, avgDmg, wins, battleCount) {
-            this.tanks.push({lvl: lvl , avgDmg: avgDmg, wins: wins, battleCount: battleCount});
-            console.log(this.tanks);
-        },
-        deleteTank: function(index) {
-            this.tanks.splice(index, 1)
-        },
+
         allNames: function() {
+            this.names = [];
             for (var i = 0; i < this.info.length; i++) {
-                this.names.push(this.info[i].name)
+                this.names.push(this.info[i].name) 
             }
-                
-            
+        },
+        getPhotos: function(count) {
+            this.loading = true;
+            console.log(this.loading);
+            axios.get('https://jsonplaceholder.typicode.com/photos/' + count )
+                .then(response => (this.photos = response.data))
+                .catch(error =>(console.log(error)))
+                .finally(this.loading = false);
+            console.log(this.loading)
+        },
+        getPosts: function(count) {
+            this.posts = [];
+            for(var i = 1; i <= count; i++) {
+                axios.get('https://jsonplaceholder.typicode.com/posts/' + i )
+                .then(response => (this.posts.push(response.data)))
+                .catch(error =>(console.log(error)))
+                .finally(this.loading = false);
+                console.log(this.posts)
+            }
+        },
+        delPost: function(index) {
+            this.posts.splice(index, 1)
         }
+
     }
 
 }
@@ -110,11 +111,70 @@ body, html {
 }
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
-  background: url(assets/bg.jpg) no-repeat center / cover;
+  background: #0b0117;
+  color: #b537a4;
+}
+
+button {
+    display: inline-block;
+    background: transparent;
+    border: 1px solid #b537a4;
+    padding: 10px;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #b537a4;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: .2s;
+    outline: none;
+}
+
+button:hover {
+    background: #b537a4;
+    color: #0b0117;
+}
+
+.posts ul {
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: stretch;
+    list-style-type: none;
+}
+
+.posts ul li {
+    width: 300px;
+    padding: 30px 30px 90px;
+    border: 1px solid #b537a4;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.posts ul li:not(:nth-child(3n)) {
+    margin-right: 20px;
+}
+
+.posts ul li .post-title {
+    margin: 20px 0;
+
+}
+
+.posts ul li button {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+.main-wrapper {
+    max-width: 1170px;
+    margin: auto;
 }
 
 </style>
