@@ -20,7 +20,7 @@
             
             </div>
             <div class="posts">
-                <input type="number" v-model.number="postscount">
+                <input type="number" min="0" v-model.number="postscount">
                 <button @click="getPosts(postscount)">posts</button>
                 <ul>
                     <li :key="key" v-for="(post,key,index) in posts">
