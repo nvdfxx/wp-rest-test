@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-        
+
         <div class="menu">
             <div class="menu-wrap">
-                <div class="logo">
+                <div class="logo test">
                     <img src="https://png.icons8.com/color/100/000000/unicorn.png">
                 </div>
                 <ul>
@@ -14,11 +14,11 @@
                 </ul>
             </div>
         </div>
-        
-        <div class="main-wrapper">        
-            
+
+        <div class="main-wrapper">
+
             <keep-alive>
-                <router-view></router-view> 
+                <router-view></router-view>
             </keep-alive>
 
         </div>
@@ -35,7 +35,7 @@ export default {
     name: 'app',
     data () {
         return {
-           
+
         }
     }
 }
@@ -80,7 +80,7 @@ body, html {
 
 .menu .menu-wrap ul li {
     margin-right: 20px;
-    
+
 }
 
 .menu .menu-wrap ul li a {
