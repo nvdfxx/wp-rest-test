@@ -8,16 +8,19 @@
                 </div>
                 <ul>
                     <li><router-link to='/posts'>Posts</router-link></li>
-                    <li><router-link to='/user'>Photos</router-link></li>
+                    <li><router-link to='/photos'>Photos</router-link></li>
                     <li><router-link to='/allnames'>All Names</router-link></li>
+                    <li><router-link to='/addpost'>Add Post</router-link></li>
                 </ul>
             </div>
         </div>
         
         <div class="main-wrapper">        
+            
             <keep-alive>
                 <router-view></router-view> 
             </keep-alive>
+
         </div>
 
   </div>
@@ -43,6 +46,10 @@ export default {
 body, html {
   margin: 0;
   padding: 0;
+}
+
+.main-wrapper {
+    padding-top: 50px;
 }
 
 .menu {
@@ -103,6 +110,18 @@ button {
     outline: none;
 }
 
+textarea {
+    width: 190px;
+    display: inline-block;
+    background: transparent;
+    border: 1px solid #b537a4;
+    padding: 10px;
+    font-size: 14px;
+    color: #b537a4;
+    transition: .2s;
+    outline: none;
+}
+
 a.read-it {
     display: inline-block;
     background: transparent;
@@ -115,8 +134,10 @@ a.read-it {
     margin-top: 20px;
     transition: .2s;
     outline: none;
+    text-decoration: none;
 }
 
+a.read-it:hover,
 button:hover {
     background: #b537a4;
     color: #0b0117;
