@@ -17,9 +17,9 @@
 
         <div class="main-wrapper">
 
-            <keep-alive>
+            
                 <router-view></router-view>
-            </keep-alive>
+
 
         </div>
 
@@ -29,16 +29,16 @@
 </template>
 
 <script>
-import  axios from 'axios'
+    import  axios from 'axios'
 
-export default {
-    name: 'app',
-    data () {
-        return {
+    export default {
+        name: 'app',
+        data () {
+            return {
 
+            }
         }
     }
-}
 </script>
 
 <style>
